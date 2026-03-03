@@ -57,8 +57,8 @@ password = input().strip()
 
 if (
     (len(password) >= 8)
-    and (password.isupper())
-    and (any([i.isdecimal() for i in password]))
+    and (any(l.isupper() for l in password))
+    and (any(i.isdecimal() for i in password))
 ):
     print("Welcome!")
 
