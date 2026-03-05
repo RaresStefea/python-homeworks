@@ -63,14 +63,13 @@ jsonpath = input().strip()
 
 json_init(jsonpath)
 
-print("Add a row(id,name,age,city):")
+print("Add a row(name,age,city):")
 new_row = input().strip()
 
 
 worked_row = re.split(r"[,;\s]+", new_row)
 
-if len(worked_row) == 4:
-    worked_row[0] = int(worked_row[0])
+if len(worked_row) == 3:
     json_add(jsonpath, *worked_row)
 else:
     raise NotImplementedError

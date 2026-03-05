@@ -12,19 +12,32 @@ def init_db(filepath: str) -> None:
         file.close()
 
 
-def add_record(filepath: str, id: int, name: str, age: str, city: str) -> None:
-
+def follow_id(filepath: str) -> int:
     file = open(filepath, "r")
     data = json.load(file)
+    file.close()
+
+    entries = data["entries"]
+    start = 1
+
+    if entries:
+        start = max(int(element["id"]) for element in entries) + 1
+
+    return start
+
+
+def add_record(filepath: str, name: str, age: str, city: str) -> None:
+    file = open(filepath, "r")
+    data = json.load(file)
+    file.close()
+
+    id = follow_id(filepath)
 
     new_entry = {"id": id, "name": name, "age": age, "city": city}
     data["entries"].append(new_entry)
-    file.close()
 
     json_file = open(filepath, "w")
     json.dump(data, json_file)
-
-    print("Record added!")
     json_file.close()
 
 
@@ -79,16 +92,15 @@ def update_record(filepath: str, id: int, key: str, new_value: str) -> None:
     json_file.close()
 
     key = key.lower()
-    if key not in ("id", "name", "age", "city"):
+    if key not in ("name", "age", "city"):
         print("Error: Invalid key(id, name, age, city).")
+    else:
+        for entry in data["entries"]:
+            if entry["id"] == id:
+                entry[key] = new_value
+        new_json = open(filepath, "w")
+        json.dump(data, new_json)
+        new_json.close()
 
-    for entry in data["entries"]:
-        if entry["id"] == id:
-            entry[key] = new_value
 
-    new_json = open(filepath, "w")
-    json.dump(data, new_json)
-    new_json.close()
-
-
-# /Users/2473261/database.json
+# db = "/Users/2473261/database.json"
