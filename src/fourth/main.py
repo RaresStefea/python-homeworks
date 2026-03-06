@@ -68,6 +68,7 @@ new_row = input().strip()
 
 
 worked_row = re.split(r"[,;\s]+", new_row)
+worked_row[1] = int(worked_row[1])
 
 if len(worked_row) == 3:
     json_add(jsonpath, *worked_row)

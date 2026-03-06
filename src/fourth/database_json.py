@@ -1,5 +1,6 @@
 from __future__ import annotations
-import os, csv, json
+import os, json
+from .schema import db_validator, entry_validator
 
 
 def init_db(filepath: str) -> None:
@@ -16,6 +17,7 @@ def follow_id(filepath: str) -> int:
     file = open(filepath, "r")
     data = json.load(file)
     file.close()
+    db_validator.validate(data)
 
     entries = data["entries"]
     start = 1
@@ -30,11 +32,15 @@ def add_record(filepath: str, name: str, age: str, city: str) -> None:
     file = open(filepath, "r")
     data = json.load(file)
     file.close()
+    db_validator.validate(data)
 
     id = follow_id(filepath)
 
     new_entry = {"id": id, "name": name, "age": age, "city": city}
+    entry_validator.validate(new_entry)
+
     data["entries"].append(new_entry)
+    db_validator.validate(data)
 
     json_file = open(filepath, "w")
     json.dump(data, json_file)
@@ -44,6 +50,7 @@ def add_record(filepath: str, name: str, age: str, city: str) -> None:
 def view_records(filepath: str) -> None:
     json_file = open(filepath, "r")
     data = json.load(json_file)
+    db_validator.validate(data)
 
     for entry in data["entries"]:
         print(
@@ -56,6 +63,8 @@ def view_records(filepath: str) -> None:
 def search_record(filepath: str, search_term: str) -> None:
     json_file = open(filepath, "r")
     data = json.load(json_file)
+    db_validator.validate(data)
+
     for entry in data["entries"]:
         if (
             str(entry.get("id")) == search_term
@@ -70,6 +79,7 @@ def search_record(filepath: str, search_term: str) -> None:
 def delete_record(filepath: str, delete_term: str) -> None:
     json_file = open(filepath, "r")
     data = json.load(json_file)
+    db_validator.validate(data)
 
     new_entries = [
         entry
@@ -80,6 +90,7 @@ def delete_record(filepath: str, delete_term: str) -> None:
     ]
     data["entries"] = new_entries
     json_file.close()
+    db_validator.validate(data)
 
     new_json = open(filepath, "w")
     json.dump(data, new_json)
@@ -90,6 +101,7 @@ def update_record(filepath: str, id: int, key: str, new_value: str) -> None:
     json_file = open(filepath, "r")
     data = json.load(json_file)
     json_file.close()
+    db_validator.validate(data)
 
     key = key.lower()
     if key not in ("name", "age", "city"):
@@ -98,6 +110,10 @@ def update_record(filepath: str, id: int, key: str, new_value: str) -> None:
         for entry in data["entries"]:
             if entry["id"] == id:
                 entry[key] = new_value
+                entry_validator.validate(entry)
+
+        db_validator.validate(data)
+
         new_json = open(filepath, "w")
         json.dump(data, new_json)
         new_json.close()
