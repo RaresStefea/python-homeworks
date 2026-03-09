@@ -1,0 +1,1 @@
+{"users": [{"name": "Alice", "id": 1}, {"name": "Bob", "id": 2}], "books": [{"title": "1984", "author": "George Orwell", "year": 1949, "id": 1}, {"title": "To Kill A Mockingbird", "author": "Harper Lee", "year": 1960, "id": 2}, {"title": "Dune", "author": "Frank Herbert", "year": 1965, "id": 3}], "user_books": [{"user_id": 1, "book_id": 1}, {"user_id": 2, "book_id": 3}]}
