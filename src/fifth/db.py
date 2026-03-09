@@ -2,7 +2,6 @@ from __future__ import annotations
 import os, json
 from .schema import db_validator, user_validator, book_validator
 
-# maps each table to its entry-level validator
 entry_validators = {
     "users": user_validator,
     "books": book_validator,
